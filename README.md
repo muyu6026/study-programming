@@ -39,25 +39,6 @@ The goal is not just to *use* computers, but to understand how they really work.
 
 ---
 
-## 📁 Repository Structure
-├── notes/ # Markdown notes for each topic
-│ ├── c-language/
-│ ├── csapp/
-│ ├── os/
-│ └── network/
-├── code/ # Code written while learning
-│ ├── c-basics/
-│ ├── data-structures/
-│ ├── leetcode/
-│ └── projects/
-├── projects/ # Larger hands-on projects
-│ ├── mini-http-server/
-│ └── simple-shell/
-├── resources/ # Curated learning resources
-└── README.md
-
----
-
 ## 🧪 Projects
 
 Here are some projects I've built to apply what I've learned:
