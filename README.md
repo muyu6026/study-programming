@@ -27,7 +27,6 @@ It contains:
 The goal is not just to *use* computers, but to understand how they really work.
 
 ---
-
 ## 🗺️ Learning Path
 
 | Phase | Focus | Key Topics | Status |
@@ -59,18 +58,15 @@ The goal is not just to *use* computers, but to understand how they really work.
 
 ---
 
-
----
-
 ## 🧪 Projects
 
 Here are some projects I've built to apply what I've learned:
 
 | Project | Description | Tech | Link |
 |---------|-------------|------|------|
-| Mini HTTP Server | A simple HTTP server handling GET and POST | C / sockets | [Link](./projects/mini-http-server) |
-| Simple Shell | A basic Unix shell supporting pipes and redirection | C | [Link](./projects/simple-shell) |
-| JSON Parser | A hand-written JSON parser to understand parsing | C | [Link](./projects/json-parser) |
+| Mini HTTP Server | A simple HTTP server handling GET and POST | C / sockets | [Not for the time being](./projects/mini-http-server) |
+| Simple Shell | A basic Unix shell supporting pipes and redirection | C | [Not for the time being](./projects/simple-shell) |
+| JSON Parser | A hand-written JSON parser to understand parsing | C | [Not for the time being](./projects/json-parser) |
 
 ---
 
