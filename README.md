@@ -71,9 +71,9 @@ I solve problems in C (and sometimes Python) to strengthen my algorithmic thinki
 
 | Problem | Topic | Solution |
 |---------|-------|----------|
-| 206. Reverse Linked List | Linked List | [code/leetcode/206.c](code/leetcode/206.c) |
-| 1. Two Sum | Hash Map | [code/leetcode/1.c](code/leetcode/1.c) |
-| 20. Valid Parentheses | Stack | [code/leetcode/20.c](code/leetcode/20.c) |
+| 206. Reverse Linked List | Linked List | [Not for the time being](code/leetcode/206.c) |
+| 1. Two Sum | Hash Map | [Not for the time being](code/leetcode/1.c) |
+| 20. Valid Parentheses | Stack | [Not for the time being](code/leetcode/20.c) |
 
 ---
 
