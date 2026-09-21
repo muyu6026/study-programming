@@ -171,10 +171,245 @@ int dlist_insert(DList *list, size_t index, int value){
 
 /* ==================== 删除 ==================== */
 
-int dlist_pop_front(DList *list, int *out);
+int dlist_pop_front(DList *list, int *out){
+    if(list == NULL ) return -1;
+    if(list->head->next == list->tail) return -2;
 
-int dlist_pop_back(DList *list, int *out);
+    DNode* N = list->head->next; //要删除的第一个真节点
 
-int dlist_remove_at(DList *list, size_t index, int *out);
+    list->head->next = N->next;
+    N->next->prev = list->head;
 
-int dlist_remove_value(DList *list, int value);
+    if(out != NULL) *out = N->value;
+    if(N == list->current) list->current = list->head;
+
+    free(N);
+    list->length--;
+    return 0;
+}
+
+int dlist_pop_back(DList *list, int *out){
+    if(list == NULL ) return -1; //参数为空
+    if(list->head->next == list->tail) return -2;//链表为空
+
+    DNode* N = list->tail->prev;//要删除的最后一个真节点
+
+    list->tail->prev = N->prev;
+    N->prev->next = list->tail;
+
+    if(out != NULL) *out = N->value;
+    if(N == list->current) list->current = list->head;
+
+    free(N);
+    list->length--;
+    return 0;
+}
+//寻找index位置的索引
+static DNode* dlist_node_at(const DList *list, size_t index){
+    
+    bool from_tail = index > (list->length/2) ? true : false;
+
+    DNode* N = from_tail ? list->head:list->tail;
+
+    if(from_tail){N = list->tail->prev;} else { N = list->head->next;}
+
+    size_t steps = from_tail ? list->length - (index+1) : index;
+
+    for(size_t i = 0; i < steps; i++){N = from_tail ? N->prev : N->next;}
+
+    return N;
+}
+
+int dlist_remove_at(DList *list, size_t index, int *out){
+    if(list == NULL) return -1;
+    if(index >= list->length) return -2;
+
+    if(index == 0) return dlist_pop_front(list,out);
+    if(index == list->length-1 ) return dlist_pop_back(list,out);
+
+    DNode* N = dlist_node_at(list,index);
+
+    N->prev->next = N->next;
+    N->next->prev = N->prev;
+
+    if(out != NULL) *out = N->value;
+    if(N == list->current ) list->current = list->head;
+
+    free(N);
+    list->length--;
+    return 0;
+
+}
+
+int dlist_remove_value(DList *list, int value){
+    if(list == NULL) return -1;
+
+    for(DNode* N = list->head->next; N != list->tail; N = N->next){
+        if(N->value == value){
+
+            N->prev->next = N->next;
+            N->next->prev = N->prev;  
+
+            if(N == list->current ) list->current = list->head;
+
+            free(N);
+
+            list->length--;
+
+            return 0;
+
+        }
+    }
+
+    return -2;
+
+}
+
+/* ==================== 访问 / 查询 ==================== */
+
+int dlist_get(const DList *list, size_t index, int *out){
+    if(list == NULL) return -1;
+    if(index >= list->length) return -2;
+
+    DNode* N = dlist_node_at(list,index);
+    if(out != NULL) *out = N->value;
+
+    return 0;
+}
+
+int dlist_set(DList *list, size_t index, int value){
+    if(list == NULL) return -1;
+    if(index >= list->length) return -2;
+
+    DNode* N = dlist_node_at(list,index);
+
+    N->value = value;
+
+    return 0;
+}
+
+int dlist_index_of(const DList *list, int value){
+    if(list == NULL) return -1;
+
+    DNode* N = list->head->next;
+    for(int i = 0; i < list->length ;i++){
+        if(N->value == value) return i;
+        N = N->next;
+    }
+    return -1;
+}
+
+bool dlist_contains(const DList *list, int value){
+    if(list == NULL) return false;
+
+    DNode* N = list->head->next;
+    for(int i = 0; i < list->length ;i++){
+        if(N->value == value) return true;
+        N = N->next;
+    }
+    return false;
+}
+
+
+/* ==================== 状态 ==================== */
+
+size_t dlist_size(const DList *list){return list == NULL ? 0 :list->length;}
+
+bool dlist_is_empty(const DList *list){return list == NULL || list->head->next == list->tail;}
+
+/* ==================== 遍历 / 高级 ==================== */
+
+void dlist_print_forward(const DList *list){
+    if(list == NULL) return;
+    int i = 0;
+    for(DNode* N = list->head->next;N != list -> tail;N = N->next){
+        printf("DList index %d value %d\n",i,N->value);
+        i++;
+    }
+}
+
+void dlist_print_backward(const DList *list){
+    if(list == NULL) return;
+    int i = 0;
+    
+    for(DNode* N = list->tail->prev;N != list -> head;N = N->prev){
+        int i2 = (list->length-1) - i;
+        printf("DList index %d value %d\n",i2,N->value);
+        i++;
+    }
+    return ;
+}
+
+int dlist_reverse(DList *list){
+    if(list == NULL) return -1;
+    if(list->head->next == NULL)return 0;
+
+    DNode* Curr = list->head;
+    while(Curr != NULL){
+        DNode* tmp = Curr->next;
+        Curr->next = Curr->prev;
+        Curr->prev = tmp;
+        Curr = tmp;
+    }
+
+    DNode* N = list->head;
+    list->head = list->tail;
+    list->tail = N;
+
+    list->current = list->head; 
+
+    return 0;
+}
+
+DList *dlist_clone(const DList *list){
+    if(list == NULL) return NULL;
+
+    DList* List = dlist_create();
+
+    if(List == NULL) return NULL;
+
+    for(DNode* N = list->head->next; N != list->tail; N = N->next){
+
+        int code = dlist_push_back(List,N->value);
+        if(code != 0){
+            dlist_destroy(List);
+            return NULL;
+        }
+    }
+
+    return List;
+}
+
+
+/* ==================== 迭代器（基于 current 游标） ==================== */
+
+void dlist_iter_begin(DList *list){
+    if(list == NULL) return ;
+    list->current = list->head->next;
+}
+
+void dlist_iter_begin_back(DList *list){
+    if(list == NULL) return ;
+    list->current = list->tail->prev;
+}
+
+bool dlist_iter_next(DList *list, int *out){
+    if(list == NULL) return false;
+
+    if(list->current == list->tail) return false;
+    if(out != NULL) *out = list->current->value;
+
+    list->current = list->current->next;
+    return true;
+}
+
+bool dlist_iter_prev(DList *list, int *out){
+    if(list == NULL) return false;
+
+    if(list->current == list->head)return false;
+
+    if(out != NULL) *out = list->current->value;
+
+    list->current = list->current->prev;
+    return true;
+}
